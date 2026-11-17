@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StatLab UNPER — Aplikasi Statistika & Probabilitas</title>
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/komponen.css">
+</head>
+<body>
+
+  <div class="app-shell">
+    <!-- SIDEBAR NAVIGASI & PENGATURAN -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">S1</div>
+        <div>
+          <strong>StatLab Informatika</strong>
+          <span>UTS Statistika &bull; UNPER</span>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">MODUL PERHITUNGAN</span>
+        <button type="button" class="menu-btn active" data-target="page-stat">
+          <span class="menu-num">01</span>
+          <span>Statistik Deskriptif</span>
+        </button>
+        <button type="button" class="menu-btn" data-target="page-prob">
+          <span class="menu-num">2A</span>
+          <span>Probabilitas Dasar</span>
+        </button>
+        <button type="button" class="menu-btn" data-target="page-bayes">
+          <span class="menu-num">2B</span>
+          <span>Bersyarat &amp; Bayes</span>
+        </button>
+      </div>
+
+      <div class="sidebar-tools">
+        <span class="nav-label">PENGATURAN TAMPILAN</span>
+        <div class="tool-field">
+          <label for="pilih-desimal">Pembulatan Desimal</label>
+          <select id="pilih-desimal">
+            <option value="2">2 angka belakang koma</option>
+            <option value="3">3 angka belakang koma</option>
+            <option value="4" selected>4 angka belakang koma</option>
+          </select>
+        </div>
+
+        <button type="button" id="btn-cetak" class="btn-sidebar">
+          Cetak / Simpan PDF
+        </button>
+      </div>
+
+      <div class="sidebar-footer">
+        <p>Teknik Informatika &bull; Sem. 3</p>
+        <small>Dosen: Teuku Mufizar, M.Kom</small>
+      </div>
+    </aside>
+
+    <!-- AREA KONTEN UTAMA -->
+    <div class="workspace">
+      <!-- Header Khusus Mode Cetak -->
+      <div class="print-only-header">
+        <h2>Laporan Hasil Pengolahan Data Statistika &amp; Probabilitas</h2>
+        <p>Program Studi Teknik Informatika &mdash; Universitas Perjuangan Tasikmalaya</p>
+      </div>
+
+      <!-- KARTU IDENTITAS ANGGOTA KELOMPOK (TAMPIL DI LAYAR & CETAK PDF) -->
+      <div class="team-card">
+        <div class="team-card-head">
+          <strong>Identitas Anggota Kelompok</strong>
+          <span>Prodi Teknik Informatika (S1) &bull; Semester 3</span>
+        </div>
+        <div class="team-grid">
+          <div class="member-item">
+            <span class="member-no">1</span>
+            <div>
+              <strong>RIZKAN ANWAR FAUZI</strong>
+              <small>NIM: 2503010021</small>
+            </div>
+          </div>
+          <div class="member-item">
+            <span class="member-no">2</span>
+            <div>
+              <strong>ADRIANDRA</strong>
+              <small>NIM: 2503010016</small>
+            </div>
+          </div>
+          <div class="member-item">
+            <span class="member-no">3</span>
+            <div>
+              <strong>MUHAMAD FRIAN ERLIANA</strong>
+              <small>NIM: 2503010017</small>
+            </div>
+          </div>
+          <div class="member-item">
+            <span class="member-no">4</span>
+            <div>
+              <strong>MUHAMAD HUSNI</strong>
+              <small>NIM: 2503010009</small>
+            </div>
+          </div>
+          <div class="member-item">
+            <span class="member-no">5</span>
+            <div>
+              <strong>NAZWA ALLIA KUSMANA</strong>
+              <small>NIM: 2503010036</small>
+            </div>
+          </div>
+          <div class="member-item">
+            <span class="member-no">6</span>
+            <div>
+              <strong>NAZMIATUL FITRI</strong>
+              <small>NIM: 2503010139</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- HALAMAN 1: SOAL 1 - STATISTIK DESKRIPTIF & VISUALISASI            -->
+      <!-- ================================================================= -->
+      <section id="page-stat" class="page-view active">
+        <div class="page-header">
+          <div>
+            <h1>Pengolahan Data Statistik Deskriptif</h1>
+            <p>Input data numerik manual atau impor file CSV untuk menghitung 14 parameter dan grafik distribusi.</p>
+          </div>
+          <div class="header-actions">
+            <button type="button" id="btn-unduh-template" class="btn btn-outline btn-sm">
+              Unduh Contoh CSV
+            </button>
+            <button type="button" id="btn-ekspor-hasil" class="btn btn-outline btn-sm">
+              Ekspor Hasil (.csv)
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel Input Data -->
+        <div class="panel">
+          <div class="input-split">
+            <div class="field">
+              <label for="input-angka">Masukkan Data Numerik (pisahkan dengan koma, spasi, atau baris baru)</label>
+              <textarea
+                id="input-angka"
+                rows="4"
+                placeholder="Contoh: 72, 76, 80, 82, 84, 84, 86, 88, 90, 94, 38, 132"
+              ></textarea>
+            </div>
+
+            <div class="field">
+              <label for="input-file-csv">Atau Impor dari File CSV (.csv / .txt)</label>
+              <label class="dropzone" for="input-file-csv">
+                <input type="file" id="input-file-csv" accept=".csv,.txt">
+                <strong id="nama-file-csv">Klik untuk memilih file CSV</strong>
+                <span>Otomatis membaca kolom angka dan melewati baris judul (header).</span>
+              </label>
+
+              <div id="box-kolom-csv" class="hidden" style="margin-top: 10px;">
+                <label for="select-kolom-csv">Pilih Kolom Numerik:</label>
+                <select id="select-kolom-csv"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-bar">
+            <button type="button" id="btn-proses-stat" class="btn btn-teal">
+              Proses / Hitung Statistik
+            </button>
+            <button type="button" id="btn-isi-contoh" class="btn btn-soft">
+              Isi Data Contoh
+            </button>
+            <button type="button" id="btn-bersihkan" class="btn btn-outline">
+              Reset Data
+            </button>
+          </div>
+
+          <div id="alert-stat" class="alert-box hidden"></div>
+        </div>
+
+        <!-- Ringkasan Cepat 4 KPI Utama -->
+        <div class="summary-strip">
+          <div class="mini-stat">
+            <span>Jumlah Data (n)</span>
+            <strong id="top-n">0</strong>
+          </div>
+          <div class="mini-stat">
+            <span>Mean (Rata-rata)</span>
+            <strong id="top-mean">-</strong>
+          </div>
+          <div class="mini-stat">
+            <span>Median (Nilai Tengah)</span>
+            <strong id="top-median">-</strong>
+          </div>
+          <div class="mini-stat">
+            <span>Standar Deviasi (s)</span>
+            <strong id="top-sd">-</strong>
+          </div>
+        </div>
+
+        <!-- Tabel 14 Ukuran Statistik -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Hasil Lengkap 14 Ukuran Statistik</h2>
+            <span class="badge-info" id="status-urut">Menunggu input data</span>
+          </div>
+
+          <div class="dual-table-grid">
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th style="width: 44px;">No</th>
+                  <th>Ukuran Statistik</th>
+                  <th class="right">Hasil</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Jumlah data (<em>n</em>)</td>
+                  <td class="right" id="val-n">-</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Total nilai (&Sigma;<em>x</em>)</td>
+                  <td class="right" id="val-sum">-</td>
+                </tr>
+                <tr class="row-accent">
+                  <td>3</td>
+                  <td>Mean (rata-rata)</td>
+                  <td class="right" id="val-mean">-</td>
+                </tr>
+                <tr class="row-accent">
+                  <td>4</td>
+                  <td>Median</td>
+                  <td class="right" id="val-median">-</td>
+                </tr>
+                <tr class="row-accent">
+                  <td>5</td>
+                  <td>Modus</td>
+                  <td class="right" id="val-mode">-</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Nilai minimum</td>
+                  <td class="right" id="val-min">-</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>Nilai maksimum</td>
+                  <td class="right" id="val-max">-</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table class="clean-table">
+              <thead>
+                <tr>
+                  <th style="width: 44px;">No</th>
+                  <th>Ukuran Statistik</th>
+                  <th class="right">Hasil</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>8</td>
+                  <td>Range (jangkauan)</td>
+                  <td class="right" id="val-range">-</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Varians (Sampel <em>s</em>&sup2; | Populasi &sigma;&sup2;)</td>
+                  <td class="right" id="val-var">-</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>Standar deviasi (Sampel <em>s</em> | Populasi &sigma;)</td>
+                  <td class="right" id="val-sd">-</td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>Kuartil 1 (<em>Q</em><sub>1</sub>)</td>
+                  <td class="right" id="val-q1">-</td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>Kuartil 3 (<em>Q</em><sub>3</sub>)</td>
+                  <td class="right" id="val-q3">-</td>
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td>Interquartile Range (IQR)</td>
+                  <td class="right" id="val-iqr">-</td>
+                </tr>
+                <tr class="row-amber">
+                  <td>14</td>
+                  <td>Deteksi outlier (1,5 &times; IQR)</td>
+                  <td class="right" id="val-outlier">-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="sorted-bar">
+            <strong>Urutan Data:</strong> <span id="val-urut">-</span>
+          </div>
+        </div>
+
+        <!-- Visualisasi Data (3 Jenis Grafik Lengkap) -->
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Visualisasi Distribusi Data</h2>
+              <p class="sub-text">Arahkan kursor ke grafik untuk melihat rincian nilai pada setiap interval atau kuartil.</p>
+            </div>
+            <div class="chart-switcher">
+              <button type="button" class="chart-tab active" data-chart="all">Tampilkan Semua</button>
+              <button type="button" class="chart-tab" data-chart="hist">Histogram</button>
+              <button type="button" class="chart-tab" data-chart="box">Boxplot</button>
+              <button type="button" class="chart-tab" data-chart="bar">Diagram Batang</button>
+            </div>
+          </div>
+
+          <div class="charts-wrapper" id="charts-wrapper">
+            <div class="chart-card" id="card-hist">
+              <h3>a) Histogram Distribusi Frekuensi</h3>
+              <div class="canvas-holder">
+                <canvas id="canvas-hist"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card" id="card-box">
+              <h3>b) Boxplot (Deteksi Kuartil &amp; Outlier)</h3>
+              <div class="canvas-holder">
+                <canvas id="canvas-box"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card full-span" id="card-bar">
+              <h3>c) Diagram Batang Distribusi Frekuensi &amp; Persentase</h3>
+              <div class="canvas-holder">
+                <canvas id="canvas-bar"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabel Distribusi Frekuensi -->
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Tabel Distribusi Frekuensi Kelompok</h2>
+          </div>
+          <div class="table-scroll">
+            <table class="clean-table center-table">
+              <thead>
+                <tr>
+                  <th>Kelas</th>
+                  <th>Interval Kelas</th>
+                  <th>Titik Tengah (<em>X<sub>i</sub></em>)</th>
+                  <th>Frekuensi (<em>f<sub>i</sub></em>)</th>
+                  <th>Frekuensi Relatif</th>
+                  <th>Frekuensi Kumulatif</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-freq">
+                <tr>
+                  <td colspan="6" class="muted">Belum ada data yang diproses.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- HALAMAN 2: SOAL 2A - PROBABILITAS DASAR                           -->
+      <!-- ================================================================= -->
+      <section id="page-prob" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1>Kalkulator Probabilitas Dasar</h1>
+            <p>Menghitung peluang kejadian, komplemen, gabungan P(A&cup;B), irisan P(A&cap;B), saling lepas, dan independen.</p>
+          </div>
+        </div>
+
+        <div class="split-2">
+          <!-- Kolom Input -->
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Parameter Kejadian A dan B</h2>
+            </div>
+
+            <div class="row-2">
+              <div class="field">
+                <label for="in-pa">Probabilitas Kejadian A, <em>P(A)</em></label>
+                <input type="number" id="in-pa" step="0.0001" min="0" max="1" value="0.3">
+              </div>
+              <div class="field">
+                <label for="in-pb">Probabilitas Kejadian B, <em>P(B)</em></label>
+                <input type="number" id="in-pb" step="0.0001" min="0" max="1" value="0.4">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="in-relasi">Hubungan Antara Kejadian A dan B</label>
+              <select id="in-relasi">
+                <option value="saling-lepas" selected>Kejadian Saling Lepas — P(A&cap;B) = 0</option>
+                <option value="independen">Kejadian Independen — P(A&cap;B) = P(A) &times; P(B)</option>
+                <option value="umum">Kejadian Umum — Masukkan P(A&cap;B) Manual</option>
+              </select>
+            </div>
+
+            <div id="box-irisan-manual" class="field hidden">
+              <label for="in-pab">Nilai Irisan <em>P(A &cap; B)</em> [0 sampai 1]</label>
+              <input type="number" id="in-pab" step="0.0001" min="0" max="1" value="0.1">
+            </div>
+
+            <div class="btn-bar">
+              <button type="button" id="btn-hitung-2a" class="btn btn-teal">Hitung Probabilitas</button>
+              <button type="button" id="btn-kasus-2a" class="btn btn-soft">Muat Contoh Soal 2A</button>
+            </div>
+
+            <div id="alert-2a" class="alert-box hidden"></div>
+
+            <hr class="divider">
+
+            <div class="helper-section">
+              <h3>Bantu Hitung <em>P(A)</em> dari Ruang Sampel: <em>n(A) / n(S)</em></h3>
+              <div class="row-2">
+                <div class="field">
+                  <label for="in-na">Jumlah Kejadian Sukses <em>n(A)</em></label>
+                  <input type="number" id="in-na" min="0" value="3">
+                </div>
+                <div class="field">
+                  <label for="in-ns">Total Ruang Sampel <em>n(S)</em></label>
+                  <input type="number" id="in-ns" min="1" value="10">
+                </div>
+              </div>
+              <button type="button" id="btn-terapkan-ns" class="btn btn-outline btn-sm">
+                Terapkan Hasil ke P(A)
+              </button>
+            </div>
+          </div>
+
+          <!-- Kolom Hasil -->
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Hasil &amp; Visualisasi Peluang</h2>
+            </div>
+
+            <table class="clean-table">
+              <tbody>
+                <tr>
+                  <td>Probabilitas Kejadian A, <em>P(A)</em></td>
+                  <td class="right" id="out-2a-pa">-</td>
+                </tr>
+                <tr>
+                  <td>Probabilitas Komplemen <em>P(A') = 1 &minus; P(A)</em></td>
+                  <td class="right" id="out-2a-pac">-</td>
+                </tr>
+                <tr>
+                  <td>Probabilitas Kejadian B, <em>P(B)</em></td>
+                  <td class="right" id="out-2a-pb">-</td>
+                </tr>
+                <tr>
+                  <td>Probabilitas Komplemen <em>P(B') = 1 &minus; P(B)</em></td>
+                  <td class="right" id="out-2a-pbc">-</td>
+                </tr>
+                <tr class="row-accent">
+                  <td>Probabilitas Irisan <em>P(A &cap; B)</em> [A dan B]</td>
+                  <td class="right" id="out-2a-inter">-</td>
+                </tr>
+                <tr class="row-teal">
+                  <td>Probabilitas Gabungan <em>P(A &cup; B)</em> [A atau B]</td>
+                  <td class="right" id="out-2a-union">-</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Visual Bar Proporsi Ruang Sampel -->
+            <div class="prob-visual-box">
+              <div class="visual-label">
+                <span>Proporsi Ruang Sampel (Total = 1,00 / 100%)</span>
+                <span id="label-sisa-ruang">Sisa: -</span>
+              </div>
+              <div class="stacked-bar">
+                <div id="bar-only-a" class="seg-a" title="Hanya A"></div>
+                <div id="bar-inter" class="seg-inter" title="Irisan A dan B"></div>
+                <div id="bar-only-b" class="seg-b" title="Hanya B"></div>
+              </div>
+              <div class="legend-inline">
+                <span><i class="dot dot-a"></i> Hanya A</span>
+                <span><i class="dot dot-inter"></i> Irisan (A&cap;B)</span>
+                <span><i class="dot dot-b"></i> Hanya B</span>
+                <span><i class="dot dot-none"></i> Di luar A&cup;B</span>
+              </div>
+            </div>
+
+            <div class="formula-card">
+              <strong>Langkah Perhitungan:</strong>
+              <pre id="rumus-2a">-</pre>
+            </div>
+
+            <div class="interp-card">
+              <strong>Interpretasi:</strong>
+              <p id="ket-2a">-</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- HALAMAN 3: SOAL 2B - PROBABILITAS BERSYARAT & TEOREMA BAYES       -->
+      <!-- ================================================================= -->
+      <section id="page-bayes" class="page-view">
+        <div class="page-header">
+          <div>
+            <h1>Probabilitas Bersyarat &amp; Teorema Bayes</h1>
+            <p>Analisis peluang bersyarat P(A|B) dan pembaruan probabilitas posterior pada sistem deteksi phishing.</p>
+          </div>
+        </div>
+
+        <div class="split-2">
+          <!-- Bagian 1: Probabilitas Bersyarat -->
+          <div class="panel">
+            <div class="panel-head">
+              <h2>1. Probabilitas Bersyarat <em>P(A|B)</em></h2>
+            </div>
+
+            <div class="field">
+              <label for="in-cond-pa">Probabilitas Kejadian A, <em>P(A)</em></label>
+              <input type="number" id="in-cond-pa" step="0.0001" min="0.0001" max="1" value="0.4">
+            </div>
+            <div class="field">
+              <label for="in-cond-pb">Probabilitas Kejadian B, <em>P(B)</em></label>
+              <input type="number" id="in-cond-pb" step="0.0001" min="0.0001" max="1" value="0.5">
+            </div>
+            <div class="field">
+              <label for="in-cond-pab">Probabilitas Irisan, <em>P(A &cap; B)</em></label>
+              <input type="number" id="in-cond-pab" step="0.0001" min="0" max="1" value="0.2">
+            </div>
+
+            <div class="btn-bar">
+              <button type="button" id="btn-hitung-cond" class="btn btn-teal">Hitung Bersyarat</button>
+            </div>
+            <div id="alert-cond" class="alert-box hidden"></div>
+
+            <table class="clean-table" style="margin-top: 16px;">
+              <tbody>
+                <tr class="row-accent">
+                  <td><em>P(A | B)</em> = P(A&cap;B) / P(B)</td>
+                  <td class="right" id="out-cond-ab">-</td>
+                </tr>
+                <tr class="row-teal">
+                  <td><em>P(B | A)</em> = P(A&cap;B) / P(A)</td>
+                  <td class="right" id="out-cond-ba">-</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="interp-card">
+              <strong>Interpretasi Hasil:</strong>
+              <p id="ket-cond">-</p>
+            </div>
+          </div>
+
+          <!-- Bagian 2: Teorema Bayes -->
+          <div class="panel">
+            <div class="panel-head">
+              <h2>2. Teorema Bayes (Studi Kasus Filter Phishing)</h2>
+            </div>
+
+            <div class="field">
+              <label for="in-bayes-prev">Prevalensi Email Phishing <em>P(H)</em> dalam %</label>
+              <input type="number" id="in-bayes-prev" step="0.01" min="0.01" max="99.99" value="8">
+            </div>
+            <div class="field">
+              <label for="in-bayes-sens">Sensitivitas Deteksi <em>P(Ditandai | Phishing)</em> dalam %</label>
+              <input type="number" id="in-bayes-sens" step="0.01" min="0" max="100" value="92">
+            </div>
+            <div class="field">
+              <label for="in-bayes-fp">False Positive Rate <em>P(Ditandai | Aman)</em> dalam %</label>
+              <input type="number" id="in-bayes-fp" step="0.01" min="0" max="100" value="3">
+            </div>
+
+            <div class="btn-bar">
+              <button type="button" id="btn-hitung-bayes" class="btn btn-teal">Hitung Teorema Bayes</button>
+              <button type="button" id="btn-kasus-2b" class="btn btn-soft">Muat Contoh Soal 2B</button>
+            </div>
+            <div id="alert-bayes" class="alert-box hidden"></div>
+
+            <table class="clean-table" style="margin-top: 16px;">
+              <tbody>
+                <tr class="row-accent">
+                  <td>1. Probabilitas Email Ditandai Sistem, <em>P(Ditandai)</em></td>
+                  <td class="right" id="out-bayes-pe">-</td>
+                </tr>
+                <tr class="row-teal">
+                  <td>2. Probabilitas Benar Phishing Jika Ditandai, <em>P(Phishing | Ditandai)</em></td>
+                  <td class="right" id="out-bayes-post">-</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Simulasi 1.000 Email -->
+            <div class="sim-box" id="sim-bayes-box">
+              <strong>Ilustrasi pada 1.000 Email Masuk:</strong>
+              <p id="sim-bayes-text">-</p>
+            </div>
+
+            <div class="formula-card">
+              <strong>Penjabaran Rumus Bayes:</strong>
+              <pre id="rumus-bayes">-</pre>
+            </div>
+
+            <div class="interp-card">
+              <strong>Interpretasi Hasil:</strong>
+              <p id="ket-bayes">-</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Tooltip Melayang untuk Grafik Canvas -->
+  <div id="chart-tooltip" class="chart-tooltip hidden"></div>
+
+  <!-- Pemanggilan Modul JavaScript per Anggota Kelompok -->
+  <script src="js/statistik.js"></script>
+  <script src="js/grafik.js"></script>
+  <script src="js/probabilitas.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
